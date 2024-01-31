@@ -1,6 +1,13 @@
 import streamlit as st
 from fpdf import FPDF
 from io import BytesIO
+
+def get_binary_file_downloader_html(bin_file, file_label='File'):
+    with open(bin_file.name, 'wb') as f:
+        f.write(bin_file.read())
+    href = f'<a href="data:file/pdf;base64,{bin_file.read().decode()}" download="{file_label}.pdf">Download {file_label}</a>'
+    return href
+
 def generate_resume(data):
     pdf = FPDF()
     pdf.add_page()
