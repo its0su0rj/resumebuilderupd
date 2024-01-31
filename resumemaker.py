@@ -8,10 +8,6 @@ from io import BytesIO
 def get_binary_file_downloader_html(bin_data, file_label='File'):
     href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_data).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
-
-    pdf_output.close()
-    return pdf_data
-
 def generate_resume(data):
     pdf = FPDF()
     pdf.add_page()
@@ -28,37 +24,38 @@ def generate_resume(data):
 
     # Add Education Details
     pdf.cell(200, 10, txt="\nEducation Details:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Education Details'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Education Details'], align='L')
 
     # Add Programming Skills
     pdf.cell(200, 10, txt="\nProgramming Skills:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Programming Skills'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Programming Skills'], align='L')
 
     # Add Areas of Interest
     pdf.cell(200, 10, txt="\nAreas of Interest:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Areas of Interest'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Areas of Interest'], align='L')
 
     # Add Projects
     pdf.cell(200, 10, txt="\nProjects:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Projects'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Projects'], align='L')
 
     # Add Internship Details
     pdf.cell(200, 10, txt="\nInternship Details:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Internship Details'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Internship Details'], align='L')
 
     # Add Academic Certification
     pdf.cell(200, 10, txt="\nAcademic Certification:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Academic Certification'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Academic Certification'], align='L')
 
     # Add Extracurricular Activities
     pdf.cell(200, 10, txt="\nExtracurricular Activities:", ln=True, align='L')
-    pdf.multi_cell(200, 10, txt=data['Extracurricular Activities'].encode('latin-1', 'xmlcharrefreplace').decode('latin-1'), align='L')
+    pdf.multi_cell(200, 10, txt=data['Extracurricular Activities'], align='L')
 
     pdf_output = BytesIO()
-    pdf.output(pdf_output)
+    pdf_output.write(pdf.output(dest='S').encode('latin1'))
     pdf_data = pdf_output.getvalue()
     pdf_output.close()
     return pdf_data
+
 
 def main():
     st.title("Resume Maker")
