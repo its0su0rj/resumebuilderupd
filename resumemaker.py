@@ -12,6 +12,8 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
 
 
 
+
+
 def generate_resume(data):
     # Create a BytesIO object to store the PDF content
     pdf_output = BytesIO()
@@ -23,7 +25,8 @@ def generate_resume(data):
     # Add content to the PDF
     pdf.set_font("Arial", size=12)
     for key, value in data.items():
-        pdf.cell(200, 10, txt=f"{key}: {value}", ln=True, align='L')
+        content = f"{key}: {value}"
+        pdf.cell(200, 10, txt=content.encode('latin-1', 'replace').decode('latin-1'), ln=True, align='L')
 
     # Output PDF to BytesIO object
     pdf_output.write(pdf.output(dest='S').encode('latin1'))
