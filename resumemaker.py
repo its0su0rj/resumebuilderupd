@@ -11,26 +11,25 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
     return href
 
 
+
 def generate_resume(data):
+    # Create a BytesIO object to store the PDF content
+    pdf_output = BytesIO()
+
+    # Create PDF object
     pdf = FPDF()
     pdf.add_page()
+
+    # Add content to the PDF
     pdf.set_font("Arial", size=12)
-    
-    for section, content in data.items():
-        pdf.set_font("Arial", style='B', size=14)
-        pdf.cell(200, 10, txt=section, ln=True, align='C')
-        pdf.set_font("Arial", style='', size=12)
-        
-        if isinstance(content, list):  # Handle list data types
-            for line in content:
-                pdf.cell(200, 10, txt=line, ln=True, align='L')
-        else:
-            pdf.multi_cell(200, 10, txt=content, align='L')
-    
-    pdf_output = BytesIO()
+    for key, value in data.items():
+        pdf.cell(200, 10, txt=f"{key}: {value}", ln=True, align='L')
+
+    # Output PDF to BytesIO object
     pdf_output.write(pdf.output(dest='S').encode('latin1'))
-    pdf_output.seek(0)
+    
     return pdf_output
+
 
 
 def main():
