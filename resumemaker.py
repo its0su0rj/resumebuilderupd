@@ -1,11 +1,3 @@
-def get_binary_file_downloader_html(bin_file, file_label='File'):
-    with open(bin_file.name, 'wb') as f:
-        f.write(bin_file.getbuffer())
-    bin_file.close()
-    with open(bin_file.name, 'rb') as f:
-        bin_file_content = f.read()
-    href = f'<a href="data:application/octet-stream;base64,{bin_file_content.hex()}" download="{bin_file.name}">{file_label}</a>'
-    return href
 import streamlit as st
 from fpdf import FPDF
 from io import BytesIO
@@ -29,6 +21,10 @@ def generate_resume(data):
     pdf_output.write(pdf.output(dest='S').encode('latin1'))
     pdf_output.seek(0)
     return pdf_output
+
+def get_binary_file_downloader_html(bin_data, file_label='File'):
+    href = f'<a href="data:application/octet-stream;base64,{bin_data.getvalue().hex()}" download="resume.pdf">{file_label}</a>'
+    return href
 
 def main():
     st.title("Resume Maker")
