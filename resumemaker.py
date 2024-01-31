@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from fpdf import FPDF
 
@@ -16,7 +17,9 @@ def generate_resume(data):
         else:
             pdf.multi_cell(200, 10, txt=content, align='L')
     
-    pdf.output("your_resume.pdf")
+    output_path = "your_resume.pdf"  # Specify the full path where the PDF should be saved
+    pdf.output(output_path)
+    return output_path  # Return the path of the generated PDF
 
 def main():
     st.title("Resume Maker")
@@ -51,9 +54,9 @@ def main():
             "Academic Certification": academic_certification.splitlines(),
             "Extracurricular Activities": extracurricular_activities.splitlines()
         }
-        generate_resume(data)
+        resume_path = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
-        st.markdown("[Download Your Resume](./your_resume.pdf)")
+        st.markdown(f"[Download Your Resume]({resume_path})")
 
 if __name__ == "__main__":
     main()
