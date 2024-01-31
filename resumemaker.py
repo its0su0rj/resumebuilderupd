@@ -55,7 +55,9 @@ def generate_resume(data):
 
     pdf_output = BytesIO()
     pdf.output(pdf_output)
-    return pdf_output
+    pdf_data = pdf_output.getvalue()
+    pdf_output.close()
+    return pdf_data
 
 
 def main():
@@ -98,7 +100,7 @@ def main():
         }
         resume_data = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
-        st.markdown(get_binary_file_downloader_html(resume_data, "Resume PDF"), unsafe_allow_html=True)
+        st.markdown(get_binary_file_downloader_html(BytesIO(resume_data), "Resume PDF"), unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
