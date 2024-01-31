@@ -8,8 +8,9 @@ def generate_resume(data):
     pdf.set_font("Arial", size=12)
     
     for section, content in data.items():
+        pdf.set_font("Arial", style='B', size=14)
         pdf.cell(200, 10, txt=section, ln=True, align='C')
-        pdf.cell(200, 10, txt="", ln=True, align='C')
+        pdf.set_font("Arial", style='', size=12)
         
         if isinstance(content, list):  # Handle list data types
             for line in content:
@@ -18,13 +19,9 @@ def generate_resume(data):
             pdf.multi_cell(200, 10, txt=content, align='L')
     
     pdf_output = BytesIO()
-    pdf_output.write(pdf.output(dest='S').encode('latin1'))
+    pdf.output(pdf_output)
     pdf_output.seek(0)
     return pdf_output
-
-def get_binary_file_downloader_html(bin_data, file_label='File'):
-    href = f'<a href="data:application/octet-stream;base64,{bin_data.getvalue().hex()}" download="resume.pdf">{file_label}</a>'
-    return href
 
 def main():
     st.title("Resume Maker")
@@ -51,13 +48,13 @@ def main():
     if st.button("Generate Resume"):
         data = {
             "Basic Details": f"Name: {name}\nPhone Number: {phone}\nGmail: {gmail}\nGithub: {github}",
-            "Education Details": education_details.splitlines(),
-            "Programming Skills": programming_skills.splitlines(),
-            "Areas of Interest": areas_of_interest.splitlines(),
-            "Projects": projects.splitlines(),
-            "Internship Details": internship_details.splitlines(),
-            "Academic Certification": academic_certification.splitlines(),
-            "Extracurricular Activities": extracurricular_activities.splitlines()
+            "Education Details": education_details,
+            "Programming Skills": programming_skills,
+            "Areas of Interest": areas_of_interest,
+            "Projects": projects,
+            "Internship Details": internship_details,
+            "Academic Certification": academic_certification,
+            "Extracurricular Activities": extracurricular_activities
         }
         resume_data = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
