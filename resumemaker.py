@@ -1,7 +1,6 @@
 import streamlit as st
 from fpdf import FPDF
 from io import BytesIO
-
 def generate_resume(data):
     pdf = FPDF()
     pdf.add_page()
@@ -19,9 +18,10 @@ def generate_resume(data):
             pdf.multi_cell(200, 10, txt=content, align='L')
     
     pdf_output = BytesIO()
-    pdf.output(pdf_output)
+    pdf_output.write(pdf.output(dest='S').encode('latin1'))
     pdf_output.seek(0)
     return pdf_output
+
 
 def main():
     st.title("Resume Maker")
