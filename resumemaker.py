@@ -17,9 +17,9 @@ def generate_resume(data):
         else:
             pdf.multi_cell(200, 10, txt=content, align='L')
     
-    output_path = "your_resume.pdf"  # Specify the full path where the PDF should be saved
+    output_path = "your_resume.pdf"  # Specify the file name
     pdf.output(output_path)
-    return output_path  # Return the path of the generated PDF
+    return output_path  # Return the file name of the generated PDF
 
 def main():
     st.title("Resume Maker")
@@ -56,7 +56,7 @@ def main():
         }
         resume_path = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
-        st.markdown(f"[Download Your Resume]({resume_path})")
+        st.markdown(f"[Download Your Resume](./{resume_path})")  # Use relative path
 
 if __name__ == "__main__":
     main()
