@@ -1,12 +1,15 @@
 import streamlit as st
+import base64
+
 from fpdf import FPDF
 from io import BytesIO
 
+
 def get_binary_file_downloader_html(bin_file, file_label='File'):
-    with open(bin_file.name, 'wb') as f:
-        f.write(bin_file.read())
-    href = f'<a href="data:file/pdf;base64,{bin_file.read().decode()}" download="{file_label}.pdf">Download {file_label}</a>'
+    bin_file.seek(0)  # Reset the pointer to the beginning of the BytesIO object
+    href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_file.read()).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
+
 
 def generate_resume(data):
     pdf = FPDF()
