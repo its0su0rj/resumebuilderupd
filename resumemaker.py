@@ -7,10 +7,8 @@ from io import BytesIO
 
 def get_binary_file_downloader_html(bin_file, file_label='File'):
     bin_file.seek(0)  # Reset the pointer to the beginning of the BytesIO object
-    href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_file.read()).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
+    href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_file.getvalue()).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
-    
-
 
 
 def generate_resume(data):
@@ -22,47 +20,42 @@ def generate_resume(data):
 
     # Add Basic Details
     pdf.cell(200, 10, txt="Basic Details:", ln=True, align='L')
-    pdf.cell(200, 10, txt=f"Name: {data['Name']}", ln=True, align='L')
-    pdf.cell(200, 10, txt=f"Phone Number: {data['Phone Number']}", ln=True, align='L')
-    pdf.cell(200, 10, txt=f"Gmail: {data['Gmail']}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Name: {data['Basic Details']['Name']}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Phone Number: {data['Basic Details']['Phone Number']}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Gmail: {data['Basic Details']['Gmail']}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Github: {data['Basic Details']['Github']}", ln=True, align='L')
 
     # Add Education Details
     pdf.cell(200, 10, txt="\nEducation Details:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Education'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Education Details'], align='L')
 
     # Add Programming Skills
     pdf.cell(200, 10, txt="\nProgramming Skills:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Programming Skills'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Programming Skills'], align='L')
 
     # Add Areas of Interest
     pdf.cell(200, 10, txt="\nAreas of Interest:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Areas of Interest'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Areas of Interest'], align='L')
 
     # Add Projects
     pdf.cell(200, 10, txt="\nProjects:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Projects'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Projects'], align='L')
 
     # Add Internship Details
     pdf.cell(200, 10, txt="\nInternship Details:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Internship Details'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Internship Details'], align='L')
 
     # Add Academic Certification
     pdf.cell(200, 10, txt="\nAcademic Certification:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Academic Certification'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Academic Certification'], align='L')
 
     # Add Extracurricular Activities
     pdf.cell(200, 10, txt="\nExtracurricular Activities:", ln=True, align='L')
-    pdf.cell(200, 10, txt=data['Extracurricular Activities'], ln=True, align='L')
+    pdf.multi_cell(200, 10, txt=data['Extracurricular Activities'], align='L')
 
-    pdf_output = "your_resume.pdf"
+    pdf_output = BytesIO()
     pdf.output(pdf_output)
     return pdf_output
-
-
-
-
-
-
 
 
 def main():
@@ -89,7 +82,12 @@ def main():
     
     if st.button("Generate Resume"):
         data = {
-            "Basic Details": f"Name: {name}\nPhone Number: {phone}\nGmail: {gmail}\nGithub: {github}",
+            "Basic Details": {
+                "Name": name,
+                "Phone Number": phone,
+                "Gmail": gmail,
+                "Github": github
+            },
             "Education Details": education_details,
             "Programming Skills": programming_skills,
             "Areas of Interest": areas_of_interest,
@@ -101,6 +99,7 @@ def main():
         resume_data = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
         st.markdown(get_binary_file_downloader_html(resume_data, "Resume PDF"), unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     main()
