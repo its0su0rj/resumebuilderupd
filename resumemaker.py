@@ -9,6 +9,9 @@ def get_binary_file_downloader_html(bin_data, file_label='File'):
     href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_data).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
 
+    pdf_output.close()
+    return pdf_data
+
 def generate_resume(data):
     pdf = FPDF()
     pdf.add_page()
@@ -57,7 +60,6 @@ def generate_resume(data):
     pdf_output.close()
     return pdf_data
 
-
 def main():
     st.title("Resume Maker")
     
@@ -100,6 +102,6 @@ def main():
         st.success("Your resume has been generated! Click the link below to download.")
         st.markdown(get_binary_file_downloader_html(resume_data, "Resume PDF"), unsafe_allow_html=True)
 
-
 if __name__ == "__main__":
     main()
+
