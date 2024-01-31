@@ -5,9 +5,8 @@ from fpdf import FPDF
 from io import BytesIO
 
 
-def get_binary_file_downloader_html(bin_file, file_label='File'):
-    bin_file.seek(0)  # Reset the pointer to the beginning of the BytesIO object
-    href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_file.getvalue()).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
+def get_binary_file_downloader_html(bin_data, file_label='File'):
+    href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_data).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
 
 
@@ -100,7 +99,7 @@ def main():
         }
         resume_data = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
-        st.markdown(get_binary_file_downloader_html(BytesIO(resume_data), "Resume PDF"), unsafe_allow_html=True)
+        st.markdown(get_binary_file_downloader_html(resume_data, "Resume PDF"), unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
