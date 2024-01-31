@@ -8,6 +8,7 @@ from io import BytesIO
 def get_binary_file_downloader_html(bin_data, file_label='File'):
     href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_data).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
+
 def generate_resume(data):
     pdf = FPDF()
     pdf.add_page()
@@ -52,9 +53,10 @@ def generate_resume(data):
 
     pdf_output = BytesIO()
     pdf.output(pdf_output)
-    pdf_data = pdf_output.getvalue()
+    pdf_data = pdf_output.getvalue().encode('latin-1', 'ignore')  # Encoding as UTF-8
     pdf_output.close()
     return pdf_data
+
 
 def main():
     st.title("Resume Maker")
