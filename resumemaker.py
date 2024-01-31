@@ -4,16 +4,17 @@ from fpdf import FPDF
 def generate_resume(data):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", size = 12)
+    pdf.set_font("Arial", size=12)
     
     for section, content in data.items():
         pdf.cell(200, 10, txt=section, ln=True, align='C')
         pdf.cell(200, 10, txt="", ln=True, align='C')
+        
         if isinstance(content, list):  # Handle list data types
-            for item in content:
-                pdf.cell(200, 10, txt=item, ln=True, align='L')
+            for line in content:
+                pdf.cell(200, 10, txt=line, ln=True, align='L')
         else:
-            pdf.cell(200, 10, txt=content, ln=True, align='L')
+            pdf.multi_cell(200, 10, txt=content, align='L')
     
     pdf.output("your_resume.pdf")
 
@@ -41,19 +42,14 @@ def main():
     
     if st.button("Generate Resume"):
         data = {
-            "Basic Details": {
-                "Name": name,
-                "Phone Number": phone,
-                "Gmail": gmail,
-                "Github": github
-            },
-            "Education Details": education_details,
-            "Programming Skills": programming_skills,
-            "Areas of Interest": areas_of_interest,
-            "Projects": projects,
-            "Internship Details": internship_details,
-            "Academic Certification": academic_certification,
-            "Extracurricular Activities": extracurricular_activities
+            "Basic Details": f"Name: {name}\nPhone Number: {phone}\nGmail: {gmail}\nGithub: {github}",
+            "Education Details": education_details.splitlines(),
+            "Programming Skills": programming_skills.splitlines(),
+            "Areas of Interest": areas_of_interest.splitlines(),
+            "Projects": projects.splitlines(),
+            "Internship Details": internship_details.splitlines(),
+            "Academic Certification": academic_certification.splitlines(),
+            "Extracurricular Activities": extracurricular_activities.splitlines()
         }
         generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
