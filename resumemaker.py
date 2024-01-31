@@ -9,29 +9,59 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
     bin_file.seek(0)  # Reset the pointer to the beginning of the BytesIO object
     href = f'<a href="data:application/octet-stream;base64,{base64.b64encode(bin_file.read()).decode()}" download="{file_label}.pdf">Download {file_label}</a>'
     return href
-
-
+    
 
 
 
 def generate_resume(data):
-    # Create a BytesIO object to store the PDF content
-    pdf_output = BytesIO()
-
-    # Create PDF object
     pdf = FPDF()
     pdf.add_page()
 
-    # Add content to the PDF
-    pdf.set_font("Arial", size=12)
-    for key, value in data.items():
-        content = f"{key}: {value}"
-        pdf.cell(200, 10, txt=content.encode('latin-1', 'replace').decode('latin-1'), ln=True, align='L')
+    # Set font for headings
+    pdf.set_font("Arial", style="B", size=12)
 
-    # Output PDF to BytesIO object
-    pdf_output.write(pdf.output(dest='S').encode('latin1'))
-    
+    # Add Basic Details
+    pdf.cell(200, 10, txt="Basic Details:", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Name: {data['Name']}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Phone Number: {data['Phone Number']}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Gmail: {data['Gmail']}", ln=True, align='L')
+
+    # Add Education Details
+    pdf.cell(200, 10, txt="\nEducation Details:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Education'], ln=True, align='L')
+
+    # Add Programming Skills
+    pdf.cell(200, 10, txt="\nProgramming Skills:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Programming Skills'], ln=True, align='L')
+
+    # Add Areas of Interest
+    pdf.cell(200, 10, txt="\nAreas of Interest:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Areas of Interest'], ln=True, align='L')
+
+    # Add Projects
+    pdf.cell(200, 10, txt="\nProjects:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Projects'], ln=True, align='L')
+
+    # Add Internship Details
+    pdf.cell(200, 10, txt="\nInternship Details:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Internship Details'], ln=True, align='L')
+
+    # Add Academic Certification
+    pdf.cell(200, 10, txt="\nAcademic Certification:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Academic Certification'], ln=True, align='L')
+
+    # Add Extracurricular Activities
+    pdf.cell(200, 10, txt="\nExtracurricular Activities:", ln=True, align='L')
+    pdf.cell(200, 10, txt=data['Extracurricular Activities'], ln=True, align='L')
+
+    pdf_output = "your_resume.pdf"
+    pdf.output(pdf_output)
     return pdf_output
+
+
+
+
+
 
 
 
