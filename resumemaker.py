@@ -1,6 +1,14 @@
-import os
+def get_binary_file_downloader_html(bin_file, file_label='File'):
+    with open(bin_file.name, 'wb') as f:
+        f.write(bin_file.getbuffer())
+    bin_file.close()
+    with open(bin_file.name, 'rb') as f:
+        bin_file_content = f.read()
+    href = f'<a href="data:application/octet-stream;base64,{bin_file_content.hex()}" download="{bin_file.name}">{file_label}</a>'
+    return href
 import streamlit as st
 from fpdf import FPDF
+from io import BytesIO
 
 def generate_resume(data):
     pdf = FPDF()
@@ -17,9 +25,10 @@ def generate_resume(data):
         else:
             pdf.multi_cell(200, 10, txt=content, align='L')
     
-    output_path = "your_resume.pdf"  # Specify the file name
-    pdf.output(output_path)
-    return output_path  # Return the file name of the generated PDF
+    pdf_output = BytesIO()
+    pdf_output.write(pdf.output(dest='S').encode('latin1'))
+    pdf_output.seek(0)
+    return pdf_output
 
 def main():
     st.title("Resume Maker")
@@ -54,9 +63,9 @@ def main():
             "Academic Certification": academic_certification.splitlines(),
             "Extracurricular Activities": extracurricular_activities.splitlines()
         }
-        resume_path = generate_resume(data)
+        resume_data = generate_resume(data)
         st.success("Your resume has been generated! Click the link below to download.")
-        st.markdown(f"[Download Your Resume](./{resume_path})")  # Use relative path
+        st.markdown(get_binary_file_downloader_html(resume_data, "Resume PDF"), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
